@@ -1,18 +1,19 @@
 package com.sda.conference_room.service;
 
+import com.sda.conference_room.model.dto.OrganizationDto;
 import com.sda.conference_room.model.entity.Organization;
 
 import java.util.List;
 
 public interface OrganizationService {
 
-    Organization saveOrganization(Organization organization);
+    OrganizationDto saveOrganization(OrganizationDto organizationDto);
 
-    List<Organization> getALlOrganizations();
+    List<OrganizationDto> getALlOrganizations();
 
-    Organization getOrganizationById(Long id);
+    OrganizationDto getOrganizationById(Long id);
 
-    Organization updateOrganization(Long organizationId, Organization organization);
+    Organization updateOrganization(Long organizationId, OrganizationDto organizationDto);
 
     void deleteOrganizationById(Long id);
 }
