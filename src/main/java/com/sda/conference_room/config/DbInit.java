@@ -32,8 +32,6 @@ public class DbInit {
         org1.setName("org1");
         organizationRepository.save(org1);
 
-
-
         ConferenceRoom cr1 = new ConferenceRoom();
         cr1.setName("cr1");
         cr1.setOrganization(org1);
@@ -42,19 +40,6 @@ public class DbInit {
         Reservation reservation = new Reservation();
         reservation.setConferenceRoom(cr1);
         reservationRepository.save(reservation);
-
-//        Organization org2 = new Organization();
-//        org2.setUserName("org2");
-//        organizationRepository.save(org2);
-//
-//        ConferenceRoom cr2 = new ConferenceRoom();
-//        cr2.setName("cr2");
-//        cr2.setOrganization(org2);
-//        conferenceRoomRepository.save(cr2);
-//
-//        Reservation reservation2 = new Reservation();
-//        reservation2.setConferenceRoom(cr2);
-//        reservationRepository.save(reservation2);
 
     }
 }

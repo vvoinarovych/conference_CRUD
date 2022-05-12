@@ -13,7 +13,7 @@ public class ConferenceRoomMapper {
                 .withAvailable(conferenceRoom.isAvailable())
                 .withSittingPlaces(conferenceRoom.getSittingPlaces())
                 .withStandingPlaces(conferenceRoom.getStandingPlaces())
-//                .withOrganizationDto(OrganizationMapper.map(conferenceRoom.getOrganization()))
+                .withOrganizationDto(OrganizationMapper.map(conferenceRoom.getOrganization()))
                 .build();
     }
 
@@ -25,7 +25,7 @@ public class ConferenceRoomMapper {
                 .withAvailable(conferenceRoomDto.isAvailable())
                 .withSittingPlaces(conferenceRoomDto.getSittingPlaces())
                 .withStandingPlaces(conferenceRoomDto.getStandingPlaces())
-//                .withOrganization(OrganizationMapper.map(conferenceRoomDto.getOrganizationDto()))
+                .withOrganization(OrganizationMapper.map(conferenceRoomDto.getOrganizationDto()))
                 .build();
     }
 }
