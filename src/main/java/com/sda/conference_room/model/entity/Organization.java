@@ -1,8 +1,10 @@
 package com.sda.conference_room.model.entity;
+
 import lombok.*;
+
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 
@@ -22,12 +24,12 @@ public class Organization {
 
 
     @Column(unique = true)
-    @Min(2)
-    @Max(20)
+    @NotBlank(message = "Name must not be blank.")
+    @Size(min = 2, max = 20, message = "Name must be between 2 and 20 characters long.")
     private String name;
 
     private String password;
 
-    @OneToMany(mappedBy = "organization",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     private List<ConferenceRoom> conferenceRoomList;
 }

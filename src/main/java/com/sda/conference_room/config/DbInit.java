@@ -32,8 +32,6 @@ public class DbInit {
         org1.setName("org1");
         organizationRepository.save(org1);
 
-
-
         ConferenceRoom cr1 = new ConferenceRoom();
         cr1.setName("cr1");
         cr1.setOrganization(org1);
