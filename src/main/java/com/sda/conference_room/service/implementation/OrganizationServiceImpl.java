@@ -24,7 +24,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     public OrganizationDto saveOrganization(OrganizationDto organizationDto) {
         Organization organizationToSave = OrganizationMapper.map(organizationDto);
         organizationRepository.save(organizationToSave);
-        log.info("Organization {} saved", organizationToSave);
+        log.info("Organization with name {} saved", organizationToSave.getName());
         return OrganizationMapper.map(organizationToSave);
     }
 
