@@ -1,14 +1,20 @@
 package com.sda.conference_room.model.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
 @Table(name = "conference_rooms")
+@Data
+@Builder(setterPrefix = "with")
+@AllArgsConstructor
+@NoArgsConstructor
 public class ConferenceRoom {
 
     @Id
@@ -20,7 +26,7 @@ public class ConferenceRoom {
 
     private int level;
 
-    private boolean availability;
+    private boolean available;
 
     private Long sittingPlaces;
 

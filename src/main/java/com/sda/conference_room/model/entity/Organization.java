@@ -1,7 +1,6 @@
 package com.sda.conference_room.model.entity;
 
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,6 +9,11 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "organizations")
+@Builder(setterPrefix = "with")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Organization {
 
     @Id
@@ -17,7 +21,7 @@ public class Organization {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userName;
+    private String name;//---------------
 
     private String password;
 
