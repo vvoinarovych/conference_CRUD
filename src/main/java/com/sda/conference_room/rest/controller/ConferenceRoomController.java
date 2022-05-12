@@ -1,7 +1,6 @@
 package com.sda.conference_room.rest.controller;
 
 import com.sda.conference_room.model.dto.ConferenceRoomDto;
-import com.sda.conference_room.model.entity.ConferenceRoom;
 import com.sda.conference_room.service.implementation.ConferenceRoomServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
