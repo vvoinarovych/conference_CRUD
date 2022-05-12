@@ -44,12 +44,12 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public Organization updateOrganization(Long organizationId, OrganizationDto organizationDto) {
+    public OrganizationDto updateOrganization(Long organizationId, OrganizationDto organizationDto) {
         final Organization organizationFromRequest = OrganizationMapper.map(organizationDto);
         organizationFromRequest.setId(organizationId);
         organizationRepository.save(organizationFromRequest);
         log.info("Organization with id {} updated", organizationId);
-        return organizationFromRequest;
+        return OrganizationMapper.map(organizationFromRequest);
     }
 
     @Override

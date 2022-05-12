@@ -26,6 +26,4 @@ public class Organization {
 
     @OneToMany(mappedBy = "organization",cascade = CascadeType.ALL)
     private List<ConferenceRoom> conferenceRoomList;
-
-
 }

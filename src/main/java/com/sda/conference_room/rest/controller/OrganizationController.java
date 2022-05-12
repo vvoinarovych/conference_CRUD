@@ -1,5 +1,4 @@
 package com.sda.conference_room.rest.controller;
-
 import com.sda.conference_room.model.dto.OrganizationDto;
 import com.sda.conference_room.model.entity.Organization;
 import com.sda.conference_room.service.OrganizationService;
@@ -33,7 +32,7 @@ public class OrganizationController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Organization> updateOrganization(@PathVariable("id") Long id, @RequestBody OrganizationDto organizationDto) {
+    public ResponseEntity<OrganizationDto> updateOrganization(@PathVariable("id") Long id, @RequestBody OrganizationDto organizationDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(organizationService.updateOrganization(id, organizationDto));
     }
 
