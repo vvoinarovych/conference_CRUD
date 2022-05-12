@@ -1,25 +1,28 @@
 package com.sda.conference_room.model.entity;
 
-import org.hibernate.annotations.Cascade;
+import lombok.Data;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.List;
 
+
 @Entity
+@Data
 @Table(name = "organizations")
 public class Organization {
 
     @Id
     @Column(name = "organization_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String userName;
 
     private String password;
 
-    @OneToMany(mappedBy = "organizations", fetch = FetchType.EAGER)
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private List<Reservation> reservationList;
+    @OneToMany(mappedBy = "organization",cascade = CascadeType.ALL)
+    private List<ConferenceRoom> conferenceRoomList;
 
 
 }

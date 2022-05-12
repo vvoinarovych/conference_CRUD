@@ -1,23 +1,24 @@
 package com.sda.conference_room.model.entity;
 
-import org.hibernate.annotations.Cascade;
+
+import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Data
 public class Reservation {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private LocalDateTime starting;
 
     private LocalDateTime ending;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Cascade({org.hibernate.annotations.CascadeType.ALL})
-    @JoinColumn(name = "conference_room_id")
+    @ManyToOne
     private ConferenceRoom conferenceRoom;
 
 
