@@ -1,6 +1,8 @@
 package com.sda.conference_room.model.entity;
 import lombok.*;
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 
@@ -20,6 +22,8 @@ public class Organization {
 
 
     @Column(unique = true)
+    @Min(2)
+    @Max(20)
     private String name;
 
     private String password;
