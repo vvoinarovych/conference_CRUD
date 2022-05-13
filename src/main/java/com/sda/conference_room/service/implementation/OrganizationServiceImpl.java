@@ -1,4 +1,6 @@
 package com.sda.conference_room.service.implementation;
+
+import com.sda.conference_room.exception.NameIsNotUniqueException;
 import com.sda.conference_room.exception.NotFoundException;
 import com.sda.conference_room.mapper.OrganizationMapper;
 import com.sda.conference_room.model.dto.OrganizationDto;
@@ -24,10 +26,14 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public OrganizationDto saveOrganization(OrganizationDto organizationDto) {
-        Organization organizationToSave = OrganizationMapper.map(organizationDto);
-        organizationRepository.save(organizationToSave);
-        log.info("Organization with name {} saved", organizationToSave.getName());
-        return OrganizationMapper.map(organizationToSave);
+        Organization organizationFromDb = organizationRepository.findOrganizationByName(organizationDto.getName());
+        if (organizationFromDb == null) {
+            Organization organizationToSave = OrganizationMapper.map(organizationDto);
+            organizationRepository.save(organizationToSave);
+            log.info("Organization with name {} saved", organizationToSave.getName());
+            return OrganizationMapper.map(organizationToSave);
+        }
+        throw new NameIsNotUniqueException("Organization with that name already exists");
     }
 
     @Override
@@ -62,6 +68,6 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private Organization getOrganizationFromDbById(Long organizationId) {
         final Optional<Organization> organizationFromDatabase = organizationRepository.findById(organizationId);
-        return organizationFromDatabase.orElseThrow(()-> new NotFoundException("Organization with given id not found"));
+        return organizationFromDatabase.orElseThrow(() -> new NotFoundException("Organization with given id not found"));
     }
 }
