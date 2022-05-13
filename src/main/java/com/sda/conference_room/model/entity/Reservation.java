@@ -1,16 +1,22 @@
 package com.sda.conference_room.model.entity;
 
-
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Builder(setterPrefix = "with")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Table(name = "reservations")
+
 public class Reservation {
 
     @Id
+    @Column(name = "reservation_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -20,7 +26,6 @@ public class Reservation {
 
     @ManyToOne
     private ConferenceRoom conferenceRoom;
-
 
 
 }
