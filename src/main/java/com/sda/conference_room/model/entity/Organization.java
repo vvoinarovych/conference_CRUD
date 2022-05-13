@@ -1,7 +1,5 @@
 package com.sda.conference_room.model.entity;
-
 import lombok.*;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -30,6 +28,6 @@ public class Organization {
 
     private String password;
 
-    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "organization",cascade = CascadeType.ALL)
     private List<ConferenceRoom> conferenceRoomList;
 }

@@ -1,4 +1,5 @@
 package com.sda.conference_room.service.implementation;
+import com.sda.conference_room.exception.NotFoundException;
 import com.sda.conference_room.mapper.OrganizationMapper;
 import com.sda.conference_room.model.dto.OrganizationDto;
 import com.sda.conference_room.model.entity.Organization;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -60,6 +62,6 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private Organization getOrganizationFromDbById(Long organizationId) {
         final Optional<Organization> organizationFromDatabase = organizationRepository.findById(organizationId);
-        return organizationFromDatabase.orElseThrow(RuntimeException::new); //TODO make custom exception (org not found)
+        return organizationFromDatabase.orElseThrow(()-> new NotFoundException("Organization with given id not found"));
     }
 }

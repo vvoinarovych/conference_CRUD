@@ -26,6 +26,6 @@ public class ApplicationExceptionHandler{
     @ExceptionHandler(NotFoundException.class)
     private ResponseEntity<ErrorModel> handleEntityNotFound(NotFoundException ex){
         ErrorModel error = new ErrorModel(HttpStatus.NOT_FOUND, "Entity not found", ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 }

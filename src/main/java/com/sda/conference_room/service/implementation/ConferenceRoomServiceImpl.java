@@ -1,5 +1,6 @@
 package com.sda.conference_room.service.implementation;
 
+import com.sda.conference_room.exception.NotFoundException;
 import com.sda.conference_room.mapper.ConferenceRoomMapper;
 import com.sda.conference_room.model.dto.ConferenceRoomDto;
 import com.sda.conference_room.model.entity.ConferenceRoom;
@@ -65,6 +66,6 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
 
     private ConferenceRoom getConferenceRoomFromDataBase(final Long id) {
         final Optional<ConferenceRoom> conferenceRoomFromDataBase = conferenceRoomRepository.findById(id);
-        return conferenceRoomFromDataBase.get(); //TODO .orElseThrow()
+        return conferenceRoomFromDataBase.orElseThrow(() -> new NotFoundException("Conference Room with given id not found"));
     }
 }
