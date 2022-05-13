@@ -23,22 +23,22 @@ public class OrganizationController {
     }
 
     @GetMapping("/find/{id}")
-    public ResponseEntity<OrganizationDto> getOrganizationById (@PathVariable("id") Long id) {
+    public ResponseEntity<OrganizationDto> getOrganizationById (@PathVariable("id") final Long id) {
         return ResponseEntity.ok(organizationService.getOrganizationById(id));
     }
 
     @PostMapping("/add")
-    public ResponseEntity<OrganizationDto> addOrganization(@RequestBody @Valid OrganizationDto organizationDto) {
+    public ResponseEntity<OrganizationDto> addOrganization(@RequestBody @Valid final OrganizationDto organizationDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(organizationService.saveOrganization(organizationDto));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<OrganizationDto> updateOrganization(@PathVariable("id") Long id, @RequestBody @Valid OrganizationDto organizationDto) {
+    public ResponseEntity<OrganizationDto> updateOrganization(@PathVariable("id") final Long id, @RequestBody @Valid final OrganizationDto organizationDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(organizationService.updateOrganization(id, organizationDto));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteEmployee(@PathVariable("id") final Long id) {
         organizationService.deleteOrganizationById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

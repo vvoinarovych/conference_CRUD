@@ -30,13 +30,13 @@ public class ConferenceRoomController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ConferenceRoomDto> addConferenceRoom(@RequestBody final @Valid ConferenceRoomDto conferenceRoom) {
+    public ResponseEntity<ConferenceRoomDto> addConferenceRoom(@RequestBody @Valid final ConferenceRoomDto conferenceRoom) {
         ConferenceRoomDto newConferenceRoom = conferenceRoomService.addConferenceRoom(conferenceRoom);
         return ResponseEntity.status(HttpStatus.CREATED).body(newConferenceRoom);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ConferenceRoomDto> updateConferenceRoom(@RequestBody final @Valid ConferenceRoomDto conferenceRoom) {
+    public ResponseEntity<ConferenceRoomDto> updateConferenceRoom(@RequestBody @Valid final ConferenceRoomDto conferenceRoom) {
         ConferenceRoomDto updatedConferenceRoom = conferenceRoomService.updateConferenceRoom(conferenceRoom);
         return ResponseEntity.status(HttpStatus.OK).body(updatedConferenceRoom);
     }
