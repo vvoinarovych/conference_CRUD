@@ -1,5 +1,7 @@
 package com.sda.conference_room.service.implementation;
 
+import com.sda.conference_room.exception.NameIsNotUniqueException;
+import com.sda.conference_room.exception.NotFoundException;
 import com.sda.conference_room.mapper.ConferenceRoomMapper;
 import com.sda.conference_room.model.dto.ConferenceRoomDto;
 import com.sda.conference_room.model.entity.ConferenceRoom;
@@ -40,11 +42,14 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
 
     @Override
     public ConferenceRoomDto addConferenceRoom(final ConferenceRoomDto conferenceRoomDto) {
-        log.info("Saving conference room with id: {}", conferenceRoomDto.getId());
-        final ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
-        final ConferenceRoom addedConferenceRoom = conferenceRoomRepository.save(conferenceRoom);
-
-        return ConferenceRoomMapper.map(addedConferenceRoom);
+        ConferenceRoom conferenceRoomFromDb = conferenceRoomRepository.findConferenceRoomByName(conferenceRoomDto.getName());
+        if(conferenceRoomFromDb == null) {
+            log.info("Saving conference room with id: {}", conferenceRoomDto.getId());
+            final ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
+            final ConferenceRoom addedConferenceRoom = conferenceRoomRepository.save(conferenceRoom);
+            return ConferenceRoomMapper.map(addedConferenceRoom);
+        }
+        throw new NameIsNotUniqueException("Conference room with that name already exists");
     }
 
     @Override
@@ -65,6 +70,6 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
 
     private ConferenceRoom getConferenceRoomFromDataBase(final Long id) {
         final Optional<ConferenceRoom> conferenceRoomFromDataBase = conferenceRoomRepository.findById(id);
-        return conferenceRoomFromDataBase.get(); //TODO .orElseThrow()
+        return conferenceRoomFromDataBase.orElseThrow(() -> new NotFoundException("Conference Room with given id not found"));
     }
 }

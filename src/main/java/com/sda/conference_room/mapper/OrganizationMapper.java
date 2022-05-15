@@ -5,7 +5,7 @@ import com.sda.conference_room.model.entity.Organization;
 
 public class OrganizationMapper {
 
-    public static Organization map(OrganizationDto dto) {
+    public static Organization map(final OrganizationDto dto) {
         return Organization.builder()
                 .withId(dto.getId())
                 .withName(dto.getName())
@@ -13,7 +13,7 @@ public class OrganizationMapper {
                 .build();
     }
 
-    public static OrganizationDto map(Organization organization){
+    public static OrganizationDto map(final Organization organization){
         return OrganizationDto.builder()
                 .withId(organization.getId())
                 .withName(organization.getName())

@@ -23,7 +23,6 @@ public class ConferenceRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     @NotBlank(message = "Name must not be blank.")
     @Size(min = 2, max = 20, message = "Name must be between 2 and 20 characters long.")
     private String name;
