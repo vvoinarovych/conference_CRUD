@@ -25,7 +25,7 @@ public class ConferenceRoomController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ConferenceRoomDto> getConferenceRoomById(@PathVariable("id") final Long id, Principal principal) {
+    public ResponseEntity<ConferenceRoomDto> getConferenceRoomById(@PathVariable("id") final Long id) {
         ConferenceRoomDto conferenceRoom = conferenceRoomService.getConferenceRoomById(id);
 
         return ResponseEntity.ok(conferenceRoom);

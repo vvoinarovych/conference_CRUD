@@ -1,8 +1,11 @@
 package com.sda.conference_room.rest.controller;
+import com.sda.conference_room.exception.NotFoundException;
+import com.sda.conference_room.model.dto.OrganizationDto;
 import com.sda.conference_room.model.entity.User;
 import com.sda.conference_room.service.implementation.UserService;
-import com.sda.conference_room.model.request.UserRequest;
+import com.sda.conference_room.model.dto.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
@@ -17,8 +20,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody @Valid final UserRequest userRequest) {
-        return ResponseEntity.ok(userService.createUser(userRequest));
+    public ResponseEntity<User> createUser(@RequestBody @Valid final UserDto userDto) {
+        return ResponseEntity.ok(userService.createUser(userDto));
     }
 
     @GetMapping("/all")
@@ -26,11 +29,14 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
-    @PostMapping("/org")
-    public ResponseEntity<User> setOrg(@RequestBody String orgName, Principal principal) {
-        String user = principal.getName();
-        User result = userService.setOrganization(user, orgName);
-        return ResponseEntity.ok().body(result);
+    @PutMapping("/org")
+    public ResponseEntity<User> addUserToOrganization(@RequestBody OrganizationDto organizationDto, Principal principal) {
+        if(principal!= null) {
+            String user = principal.getName();
+            User result = userService.setOrganization(user, organizationDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(result);
+        }
+        throw new NotFoundException("you are not logged");
     }
 
     @GetMapping("/current")

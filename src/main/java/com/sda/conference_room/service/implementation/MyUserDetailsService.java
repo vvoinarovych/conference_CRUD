@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Primary
 @RequiredArgsConstructor
-public class ConferenceUserDetailsService implements UserDetailsService {
+public class MyUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -19,6 +19,6 @@ public class ConferenceUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         return userRepository.findUserByUsername(username)
                 .map(UserDetailsAdapter::new)
-                .orElse(null);
+                .orElseThrow(()-> new UsernameNotFoundException("no such user"));
     }
 }

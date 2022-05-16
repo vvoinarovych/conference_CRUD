@@ -41,7 +41,7 @@ public class DbInit {
         Organization org1 = Organization.builder().withName("org").build();
         organizationRepository.save(org1);
 
-        Organization org2 = Organization.builder().withName("org2").build();
+        Organization org2 = Organization.builder().withName("org22").build();
         organizationRepository.save(org2);
 
         ConferenceRoom cr1 = new ConferenceRoom();
