@@ -1,5 +1,6 @@
 package com.sda.conference_room.service.implementation;
 
+import com.sda.conference_room.exception.NotFoundException;
 import com.sda.conference_room.mapper.ReservationMapper;
 import com.sda.conference_room.model.dto.ReservationDto;
 import com.sda.conference_room.model.entity.Reservation;
@@ -62,6 +63,6 @@ public class ReservationServiceImpl implements ReservationService {
 
     private Reservation getReservationFromDatabaseById(final Long id) {
         final Optional<Reservation> reservationFromDatabase = reservationRepository.findById(id);
-        return reservationFromDatabase.get();
+        return reservationFromDatabase.orElseThrow(()-> new NotFoundException("Reservation with given id not found"));
     }
 }

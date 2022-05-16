@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,12 +28,12 @@ public class ReservationController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ReservationDto> addReservation(@RequestBody ReservationDto reservationDto) {
+    public ResponseEntity<ReservationDto> addReservation(@RequestBody @Valid ReservationDto reservationDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.createReservation(reservationDto));
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ReservationDto> updateOrganization(@RequestBody ReservationDto reservationDto) {
+    public ResponseEntity<ReservationDto> updateOrganization(@RequestBody @Valid ReservationDto reservationDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.updateReservation(reservationDto));
     }
 
