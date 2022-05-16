@@ -28,8 +28,7 @@ public class DbInit {
     @EventListener
     public void handleContextRefresh(ContextRefreshedEvent event) {
 
-        Organization org1 = new Organization();
-        org1.setName("org1");
+        Organization org1 = Organization.builder().withName("cr12").build();
         organizationRepository.save(org1);
 
         ConferenceRoom cr1 = new ConferenceRoom();
