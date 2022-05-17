@@ -31,7 +31,7 @@ public class ConferenceRoomController {
 
     @PostMapping("/add")
     public ResponseEntity<ConferenceRoomDto> addConferenceRoom(@RequestBody @Valid final ConferenceRoomDto conferenceRoom) {
-        ConferenceRoomDto newConferenceRoom = conferenceRoomService.addConferenceRoom(conferenceRoom);
+        ConferenceRoomDto newConferenceRoom = conferenceRoomService.createConferenceRoom(conferenceRoom);
         return ResponseEntity.status(HttpStatus.CREATED).body(newConferenceRoom);
     }
 

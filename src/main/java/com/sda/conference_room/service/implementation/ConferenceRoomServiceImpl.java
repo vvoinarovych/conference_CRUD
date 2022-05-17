@@ -33,6 +33,16 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
     }
 
     @Override
+    public List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganization(String organizationName) {
+        log.info("Loading all  conference rooms for organization: {}.", organizationName);
+        return conferenceRoomRepository.findAll()
+                .stream()
+                .filter(room-> room.getOrganization().getName().equals(organizationName))
+                .map(ConferenceRoomMapper::map)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<ConferenceRoomDto> getAllConferenceRooms() {
         log.info("Loading all conference rooms.");
         return conferenceRoomRepository.findAll()
@@ -50,7 +60,7 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
     }
 
     @Override
-    public ConferenceRoomDto addConferenceRoom(final ConferenceRoomDto conferenceRoomDto) {
+    public ConferenceRoomDto createConferenceRoom(final ConferenceRoomDto conferenceRoomDto) {
         ConferenceRoom conferenceRoomFromDb = conferenceRoomRepository.findConferenceRoomByName(conferenceRoomDto.getName());
         if (conferenceRoomFromDb == null) {
             log.info("Saving conference room with id: {}", conferenceRoomDto.getId());

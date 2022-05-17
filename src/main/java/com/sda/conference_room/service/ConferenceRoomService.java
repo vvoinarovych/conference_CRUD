@@ -10,9 +10,11 @@ public interface ConferenceRoomService {
 
     List<ConferenceRoomDto> getAllAvailableConferenceRooms();
 
+    List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganization(String organizationName);
+
     ConferenceRoomDto getConferenceRoomById(final Long id);
 
-    ConferenceRoomDto addConferenceRoom(final ConferenceRoomDto conferenceRoomDto);
+    ConferenceRoomDto createConferenceRoom(final ConferenceRoomDto conferenceRoomDto);
 
     ConferenceRoomDto updateConferenceRoom(final ConferenceRoomDto conferenceRoomDto);
 
