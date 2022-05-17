@@ -7,6 +7,7 @@ import com.sda.conference_room.model.dto.ConferenceRoomDto;
 import com.sda.conference_room.model.entity.ConferenceRoom;
 import com.sda.conference_room.repository.ConferenceRoomRepository;
 import com.sda.conference_room.service.ConferenceRoomService;
+import com.sda.conference_room.validation.ConferenceRoomDatabaseUniquenessValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class ConferenceRoomServiceImpl implements ConferenceRoomService {
 
     private final ConferenceRoomRepository conferenceRoomRepository;
+    private final ConferenceRoomDatabaseUniquenessValidator conferenceRoomDatabaseUniquenessValidator;
 
     @Override
     public List<ConferenceRoomDto> getAllConferenceRooms() {
@@ -42,8 +44,7 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
 
     @Override
     public ConferenceRoomDto addConferenceRoom(final ConferenceRoomDto conferenceRoomDto) {
-        ConferenceRoom conferenceRoomFromDb = conferenceRoomRepository.findConferenceRoomByName(conferenceRoomDto.getName());
-        if(conferenceRoomFromDb == null) {
+        if(conferenceRoomDatabaseUniquenessValidator.isValid(conferenceRoomDto)) {
             log.info("Saving conference room with id: {}", conferenceRoomDto.getId());
             final ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
             final ConferenceRoom addedConferenceRoom = conferenceRoomRepository.save(conferenceRoom);
