@@ -58,6 +58,7 @@ public class ReservationServiceImpl implements ReservationService {
     public void deleteReservationById(Long id) {
         log.info("Deleting reservation with id: {}", id);
         reservationRepository.delete(getReservationFromDatabaseById(id));
+
     }
 
     private Reservation getReservationFromDatabaseById(final Long id) {
