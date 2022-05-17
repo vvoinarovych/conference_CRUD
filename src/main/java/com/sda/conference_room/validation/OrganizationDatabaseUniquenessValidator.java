@@ -11,9 +11,12 @@ import org.springframework.stereotype.Component;
 public class OrganizationDatabaseUniquenessValidator {
 
     private final OrganizationRepository organizationRepository;
-    private final OrganizationDto organizationDto;
 
-    public boolean isUnique() {
+    public boolean isValid(OrganizationDto organizationDto) {
+        return isNameUnique(organizationDto);
+    }
+
+    private boolean isNameUnique(OrganizationDto organizationDto) {
         Organization organizationFromDb = organizationRepository.findOrganizationByName(organizationDto.getName());
         return organizationFromDb == null;
     }

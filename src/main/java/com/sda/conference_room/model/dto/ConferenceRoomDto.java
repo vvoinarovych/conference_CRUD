@@ -15,7 +15,6 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Component
 public class ConferenceRoomDto {
 
     private Long id;

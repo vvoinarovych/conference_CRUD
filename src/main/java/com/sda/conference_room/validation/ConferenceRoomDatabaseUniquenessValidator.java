@@ -11,9 +11,12 @@ import org.springframework.stereotype.Component;
 public class ConferenceRoomDatabaseUniquenessValidator {
 
     private final ConferenceRoomRepository conferenceRoomRepository;
-    private final ConferenceRoomDto conferenceRoomDto;
 
-    public boolean isUnique() {
+    public boolean isValid(ConferenceRoomDto conferenceRoomDto) {
+        return isNameUnique(conferenceRoomDto);
+    }
+
+    private boolean isNameUnique(ConferenceRoomDto conferenceRoomDto) {
         ConferenceRoom conferenceRoomFromDb = conferenceRoomRepository.findConferenceRoomByName(conferenceRoomDto.getName());
         return conferenceRoomFromDb == null;
     }

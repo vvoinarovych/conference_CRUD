@@ -44,7 +44,7 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
 
     @Override
     public ConferenceRoomDto addConferenceRoom(final ConferenceRoomDto conferenceRoomDto) {
-        if(conferenceRoomDatabaseUniquenessValidator.isUnique()) {
+        if(conferenceRoomDatabaseUniquenessValidator.isValid(conferenceRoomDto)) {
             log.info("Saving conference room with id: {}", conferenceRoomDto.getId());
             final ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
             final ConferenceRoom addedConferenceRoom = conferenceRoomRepository.save(conferenceRoom);

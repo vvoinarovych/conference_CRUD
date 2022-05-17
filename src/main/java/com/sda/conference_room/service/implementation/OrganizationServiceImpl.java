@@ -28,7 +28,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public OrganizationDto saveOrganization(OrganizationDto organizationDto) {
-        if (!organizationDatabaseUniquenessValidator.isUnique()) {
+        if (!organizationDatabaseUniquenessValidator.isValid(organizationDto)) {
             Organization organizationToSave = OrganizationMapper.map(organizationDto);
             organizationRepository.save(organizationToSave);
             log.info("Organization with name {} saved", organizationToSave.getName());
