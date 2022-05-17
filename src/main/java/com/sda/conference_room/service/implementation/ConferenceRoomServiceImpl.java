@@ -23,11 +23,20 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
     private final ConferenceRoomRepository conferenceRoomRepository;
 
     @Override
+    public List<ConferenceRoomDto> getAllAvailableConferenceRooms() {
+        log.info("Loading all currently available conference rooms.");
+        return conferenceRoomRepository.findAll()
+                .stream()
+                .filter(ConferenceRoom::isAvailable)
+                .map(ConferenceRoomMapper::map)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<ConferenceRoomDto> getAllConferenceRooms() {
         log.info("Loading all conference rooms.");
-        List<ConferenceRoom> foundConferenceRooms = conferenceRoomRepository.findAll();
-
-        return foundConferenceRooms.stream()
+        return conferenceRoomRepository.findAll()
+                .stream()
                 .map(ConferenceRoomMapper::map)
                 .collect(Collectors.toList());
     }
@@ -43,7 +52,7 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
     @Override
     public ConferenceRoomDto addConferenceRoom(final ConferenceRoomDto conferenceRoomDto) {
         ConferenceRoom conferenceRoomFromDb = conferenceRoomRepository.findConferenceRoomByName(conferenceRoomDto.getName());
-        if(conferenceRoomFromDb == null) {
+        if (conferenceRoomFromDb == null) {
             log.info("Saving conference room with id: {}", conferenceRoomDto.getId());
             final ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
             final ConferenceRoom addedConferenceRoom = conferenceRoomRepository.save(conferenceRoom);
