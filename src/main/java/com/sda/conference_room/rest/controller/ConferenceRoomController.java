@@ -29,9 +29,9 @@ public class ConferenceRoomController {
         return ResponseEntity.ok(conferenceRoom);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<ConferenceRoomDto> addConferenceRoom(@RequestBody @Valid final ConferenceRoomDto conferenceRoom) {
-        ConferenceRoomDto newConferenceRoom = conferenceRoomService.createConferenceRoom(conferenceRoom);
+    @PostMapping("/add/{orgId}")
+    public ResponseEntity<ConferenceRoomDto> addConferenceRoom(@PathVariable("orgId") Long orgId, @RequestBody @Valid final ConferenceRoomDto conferenceRoom) {
+        ConferenceRoomDto newConferenceRoom = conferenceRoomService.createConferenceRoom(orgId, conferenceRoom);
         return ResponseEntity.status(HttpStatus.CREATED).body(newConferenceRoom);
     }
 

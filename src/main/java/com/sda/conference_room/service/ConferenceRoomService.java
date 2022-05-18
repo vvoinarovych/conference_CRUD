@@ -14,7 +14,7 @@ public interface ConferenceRoomService {
 
     ConferenceRoomDto getConferenceRoomById(final Long id);
 
-    ConferenceRoomDto createConferenceRoom(final ConferenceRoomDto conferenceRoomDto);
+    ConferenceRoomDto createConferenceRoom(final Long OrganizationId, final ConferenceRoomDto conferenceRoomDto);
 
     ConferenceRoomDto updateConferenceRoom(final ConferenceRoomDto conferenceRoomDto);
 

@@ -5,8 +5,10 @@ import com.sda.conference_room.exception.NotFoundException;
 import com.sda.conference_room.mapper.ConferenceRoomMapper;
 import com.sda.conference_room.model.dto.ConferenceRoomDto;
 import com.sda.conference_room.model.entity.ConferenceRoom;
+import com.sda.conference_room.model.entity.Organization;
 import com.sda.conference_room.repository.ConferenceRoomRepository;
 import com.sda.conference_room.service.ConferenceRoomService;
+import com.sda.conference_room.service.OrganizationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class ConferenceRoomServiceImpl implements ConferenceRoomService {
 
     private final ConferenceRoomRepository conferenceRoomRepository;
+    private final OrganizationService organizationService;
 
     @Override
     public List<ConferenceRoomDto> getAllAvailableConferenceRooms() {
@@ -37,7 +40,7 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
         log.info("Loading all  conference rooms for organization: {}.", organizationName);
         return conferenceRoomRepository.findAll()
                 .stream()
-                .filter(room-> room.getOrganization().getName().equals(organizationName))
+                .filter(room -> room.getOrganization().getName().equals(organizationName))
                 .map(ConferenceRoomMapper::map)
                 .collect(Collectors.toList());
     }
@@ -60,12 +63,14 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
     }
 
     @Override
-    public ConferenceRoomDto createConferenceRoom(final ConferenceRoomDto conferenceRoomDto) {
+    public ConferenceRoomDto createConferenceRoom(final Long organizationId, final ConferenceRoomDto conferenceRoomDto) {
         ConferenceRoom conferenceRoomFromDb = conferenceRoomRepository.findConferenceRoomByName(conferenceRoomDto.getName());
         if (conferenceRoomFromDb == null) {
             log.info("Saving conference room with id: {}", conferenceRoomDto.getId());
-            final ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
-            final ConferenceRoom addedConferenceRoom = conferenceRoomRepository.save(conferenceRoom);
+            Organization organization = organizationService.getOrganizationById(organizationId);
+            ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
+            conferenceRoom.setOrganization(organization);
+            ConferenceRoom addedConferenceRoom = conferenceRoomRepository.save(conferenceRoom);
             return ConferenceRoomMapper.map(addedConferenceRoom);
         }
         throw new NameIsNotUniqueException("Conference room with that name already exists");

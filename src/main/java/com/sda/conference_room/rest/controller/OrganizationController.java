@@ -1,6 +1,5 @@
 package com.sda.conference_room.rest.controller;
 import com.sda.conference_room.model.dto.OrganizationDto;
-import com.sda.conference_room.model.entity.Organization;
 import com.sda.conference_room.service.OrganizationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,7 +23,7 @@ public class OrganizationController {
 
     @GetMapping("/find/{id}")
     public ResponseEntity<OrganizationDto> getOrganizationById (@PathVariable("id") final Long id) {
-        return ResponseEntity.ok(organizationService.getOrganizationById(id));
+        return ResponseEntity.ok(organizationService.getOrganizationDtoById(id));
     }
 
     @PostMapping("/add")

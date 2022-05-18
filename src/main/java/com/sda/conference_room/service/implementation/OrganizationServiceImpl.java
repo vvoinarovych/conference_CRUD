@@ -28,7 +28,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public OrganizationDto saveOrganization(OrganizationDto organizationDto) {
-        if (!organizationDatabaseUniquenessValidator.isValid(organizationDto)) {
+        if (organizationDatabaseUniquenessValidator.isValid(organizationDto)) {
             Organization organizationToSave = OrganizationMapper.map(organizationDto);
             organizationRepository.save(organizationToSave);
             log.info("Organization with name {} saved", organizationToSave.getName());
@@ -46,8 +46,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public OrganizationDto getOrganizationById(Long organizationId) {
-        Organization organization = getOrganizationFromDbById(organizationId);
+    public OrganizationDto getOrganizationDtoById(Long organizationId) {
+        Organization organization = getOrganizationById(organizationId);
         log.info("Organization with id {} was found", organizationId);
         return OrganizationMapper.map(organization);
     }
@@ -63,11 +63,11 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public void deleteOrganizationById(Long organizationId) {
-        organizationRepository.delete(getOrganizationFromDbById(organizationId));
+        organizationRepository.delete(getOrganizationById(organizationId));
         log.info("Organization with id {} deleted", organizationId);
     }
 
-    private Organization getOrganizationFromDbById(Long organizationId) {
+    public Organization getOrganizationById(Long organizationId) {
         final Optional<Organization> organizationFromDatabase = organizationRepository.findById(organizationId);
         return organizationFromDatabase.orElseThrow(() -> new NotFoundException("Organization with given id not found"));
     }

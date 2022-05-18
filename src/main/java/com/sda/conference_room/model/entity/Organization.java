@@ -25,8 +25,6 @@ public class Organization {
     @Size(min = 2, max = 20, message = "Name must be between 2 and 20 characters long.")
     private String name;
 
-    private String password;
-
     @OneToMany(mappedBy = "organization",cascade = CascadeType.ALL)
     private List<ConferenceRoom> conferenceRoomList;
 }

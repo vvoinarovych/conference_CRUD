@@ -34,9 +34,9 @@ public class ConferenceRoom {
 
     private Long standingPlaces;
 
-    @OneToMany(mappedBy = "conferenceRoom", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "conferenceRoom")
     private List<Reservation> reservationList;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     private Organization organization;
 }
