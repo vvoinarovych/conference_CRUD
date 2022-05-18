@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+
 public interface ConferenceRoomRepository extends JpaRepository<ConferenceRoom, Long> {
 
     ConferenceRoom findConferenceRoomByName(String name);
