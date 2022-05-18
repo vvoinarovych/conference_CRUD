@@ -3,6 +3,7 @@ package com.sda.conference_room.mapper;
 import com.sda.conference_room.model.dto.ConferenceRoomDto;
 import com.sda.conference_room.model.dto.OrganizationDto;
 import com.sda.conference_room.model.entity.ConferenceRoom;
+import com.sda.conference_room.model.entity.Organization;
 
 public class ConferenceRoomMapper {
 
@@ -26,14 +27,22 @@ public class ConferenceRoomMapper {
     }
 
     public static ConferenceRoom map (final ConferenceRoomDto conferenceRoomDto) {
-        return ConferenceRoom.builder()
+       ConferenceRoom conferenceRoom =  ConferenceRoom.builder()
                 .withId(conferenceRoomDto.getId())
                 .withName(conferenceRoomDto.getName())
                 .withLevel(conferenceRoomDto.getLevel())
                 .withAvailable(conferenceRoomDto.isAvailable())
                 .withSittingPlaces(conferenceRoomDto.getSittingPlaces())
                 .withStandingPlaces(conferenceRoomDto.getStandingPlaces())
-                .withOrganization(OrganizationMapper.map(conferenceRoomDto.getOrganizationDto()))
+                .withOrganization(null)
                 .build();
+
+        if(conferenceRoomDto.getOrganizationDto() != null){
+            Organization organization = OrganizationMapper.map(conferenceRoomDto.getOrganizationDto());
+            conferenceRoom.setOrganization(organization);
+        } else{
+            conferenceRoomDto.setOrganizationDto(null);
+        }
+        return conferenceRoom;
     }
 }
