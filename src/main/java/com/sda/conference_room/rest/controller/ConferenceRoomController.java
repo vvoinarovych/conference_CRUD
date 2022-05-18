@@ -35,9 +35,9 @@ public class ConferenceRoomController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newConferenceRoom);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<ConferenceRoomDto> updateConferenceRoom(@RequestBody @Valid final ConferenceRoomDto conferenceRoom) {
-        ConferenceRoomDto updatedConferenceRoom = conferenceRoomService.updateConferenceRoom(conferenceRoom);
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ConferenceRoomDto> updateConferenceRoom(@PathVariable("id") Long id, @RequestBody @Valid final ConferenceRoomDto conferenceRoom) {
+        ConferenceRoomDto updatedConferenceRoom = conferenceRoomService.updateConferenceRoom(id,conferenceRoom);
         return ResponseEntity.status(HttpStatus.OK).body(updatedConferenceRoom);
     }
 
