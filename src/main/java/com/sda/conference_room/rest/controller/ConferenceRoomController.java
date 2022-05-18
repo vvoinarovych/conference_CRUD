@@ -11,7 +11,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 @RequestMapping("api/conferenceroom")
 @RequiredArgsConstructor
 public class ConferenceRoomController {
