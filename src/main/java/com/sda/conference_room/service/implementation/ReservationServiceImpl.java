@@ -58,7 +58,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationDto updateReservation(final ReservationDto reservationDto) {
+    public ReservationDto updateReservation(Long reservationId, ReservationDto reservationDto) {
 
         log.info("Updating reservation with id: {}", reservationDto.getId());
         getReservationFromDatabaseById(reservationDto.getId());
@@ -89,8 +89,8 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganizationForSpecificPeriod(String organizationName, LocalDateTime start, LocalDateTime end) {
-        List<ConferenceRoom> conferenceRooms = conferenceRoomService.getAllConferenceRoomsForSpecificOrganization(organizationName).stream().map(ConferenceRoomMapper::map).collect(Collectors.toList());
+    public List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganizationForSpecificPeriod(Long organizationId, LocalDateTime start, LocalDateTime end) {
+        List<ConferenceRoom> conferenceRooms = conferenceRoomService.getAllConferenceRoomsForSpecificOrganization(organizationId).stream().map(ConferenceRoomMapper::map).collect(Collectors.toList());
         List<Reservation> reservations = getAllReservations().stream().map(ReservationMapper::map).collect(Collectors.toList());
 
         for (ConferenceRoom room : conferenceRooms) {

@@ -13,11 +13,9 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "organizations")
 public class Organization {
 
     @Id
-    @Column(name = "organization_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

@@ -10,7 +10,6 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
-@Table(name = "conference_rooms")
 @Builder(setterPrefix = "with")
 @Getter
 @Setter
@@ -19,7 +18,6 @@ import java.util.List;
 public class ConferenceRoom {
 
     @Id
-    @Column(name = "conference_room_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -42,6 +40,5 @@ public class ConferenceRoom {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Organization organization;
-
 
 }

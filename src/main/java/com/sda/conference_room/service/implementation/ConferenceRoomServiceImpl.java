@@ -39,11 +39,11 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
     }
 
     @Override
-    public List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganization(String organizationName) {
-        log.info("Loading all  conference rooms for organization: {}.", organizationName);
+    public List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganization(Long organizationId) {
+        log.info("Loading all  conference rooms for organization: {}.", organizationId);
         return conferenceRoomRepository.findAll()
                 .stream()
-                .filter(room -> room.getOrganization().getName().equals(organizationName))
+                .filter(room -> room.getOrganization().getId().equals(organizationId))
                 .map(ConferenceRoomMapper::map)
                 .collect(Collectors.toList());
     }

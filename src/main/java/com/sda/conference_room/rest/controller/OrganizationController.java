@@ -26,7 +26,7 @@ public class OrganizationController {
         return ResponseEntity.ok(organizationService.getOrganizationDtoById(id));
     }
 
-    @PostMapping("/")
+    @PostMapping("/add")
     public ResponseEntity<OrganizationDto> addOrganization(@RequestBody @Valid final OrganizationDto organizationDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(organizationService.saveOrganization(organizationDto));
     }

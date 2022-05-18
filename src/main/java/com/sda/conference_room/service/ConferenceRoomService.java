@@ -12,7 +12,7 @@ public interface ConferenceRoomService {
 
     List<ConferenceRoomDto> getAllAvailableConferenceRooms();//for deleting
 
-    List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganization(String organizationName);
+    List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganization(Long organizationId);
 
     ConferenceRoom getConferenceRoomById(final Long id);
 

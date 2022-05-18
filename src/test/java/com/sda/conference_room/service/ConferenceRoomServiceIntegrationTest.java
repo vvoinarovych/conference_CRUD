@@ -4,6 +4,7 @@ import com.sda.conference_room.model.entity.ConferenceRoom;
 import com.sda.conference_room.model.entity.Organization;
 import com.sda.conference_room.repository.ConferenceRoomRepository;
 import com.sda.conference_room.repository.OrganizationRepository;
+import com.sda.conference_room.service.ConferenceRoomService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class ConferenceRoomServiceIntegrationTest {
         Organization organization1 = Organization.builder().withName("organization1").build();
         Organization organization2 = Organization.builder().withName("organization2").build();
         Organization organization3 = Organization.builder().withName("organization3").build();
+        System.out.println(organization1);
+
 
         organizationRepository.save(organization1);
         organizationRepository.save(organization2);
@@ -46,7 +49,7 @@ public class ConferenceRoomServiceIntegrationTest {
 
     @Test
     void shouldReturn2WhenGetAllConferenceRoomsForSpecificOrganization(){
-        assertThat(conferenceRoomService.getAllConferenceRoomsForSpecificOrganization("organization2")).hasSize(2);
+        assertThat(conferenceRoomService.getAllConferenceRoomsForSpecificOrganization(2L)).hasSize(2);
     }
 
 

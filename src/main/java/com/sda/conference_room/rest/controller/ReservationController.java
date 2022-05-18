@@ -29,7 +29,7 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.getAllReservationsByOrganizationId(id));
     }
 
-    @GetMapping("/find/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ReservationDto> getReservationById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(reservationService.getReservationById(id));
     }
@@ -39,28 +39,28 @@ public class ReservationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.createReservation(reservationDto));
     }
 
-    @PutMapping("/update")//not usable
-    public ResponseEntity<ReservationDto> updateOrganization(@RequestBody @Valid ReservationDto reservationDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.updateReservation(reservationDto));
+    @PutMapping("/{reservationId}")//not usable
+    public ResponseEntity<ReservationDto> updateReservation(@PathVariable("reservationId") Long reservationId, @RequestBody @Valid ReservationDto reservationDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.updateReservation(reservationId, reservationDto));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable("id") final Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable("id") Long id) {
         reservationService.deleteReservationById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/by/{conferenceRoomName}")
-    public ResponseEntity<List<ReservationDto>> getAllReservationsByConferenceRoomName(@PathVariable("conferenceRoomName") Long conferenceRoomId) {
+    @GetMapping("/by/{conferenceRoomId}")
+    public ResponseEntity<List<ReservationDto>> getAllReservationsByConferenceRoomId(@PathVariable("conferenceRoomId") Long conferenceRoomId) {
         return ResponseEntity.ok().body(reservationService.getAllReservationsByConferenceRoomId(conferenceRoomId));
     }
 
-    @PostMapping("/period/{organizationName}")
-    public ResponseEntity<List<ConferenceRoomDto>> getAllConferenceRoomsForSpecificOrganizationForSpecificPeriod(@PathVariable("organizationName") String organizationName,
-                                                                                                                @RequestBody ReservationDto reservationDto) {
+    @PostMapping("/period/{organizationId}")
+    public ResponseEntity<List<ConferenceRoomDto>> getAllConferenceRoomsForSpecificOrganizationForSpecificPeriod(@PathVariable("organizationId") Long organizationId,
+                                                                                                                 @RequestBody ReservationDto reservationDto) {
         LocalDateTime start = reservationDto.getStarting();
         LocalDateTime end = reservationDto.getEnding();
 
-        return ResponseEntity.ok().body(reservationService.getAllConferenceRoomsForSpecificOrganizationForSpecificPeriod(organizationName, start,  end));
+        return ResponseEntity.ok().body(reservationService.getAllConferenceRoomsForSpecificOrganizationForSpecificPeriod(organizationId, start,  end));
     }
 }
