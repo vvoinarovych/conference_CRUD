@@ -10,6 +10,7 @@ public class ReservationMapper {
                 .withId(reservation.getId())
                 .withStarting(reservation.getStarting())
                 .withEnding(reservation.getEnding())
+                .withReservationIdentifier(reservation.getReservationIdentifier())
                 .build();
     }
 
@@ -18,6 +19,7 @@ public class ReservationMapper {
                 .withId(reservationDto.getId())
                 .withStarting(reservationDto.getStarting())
                 .withEnding(reservationDto.getEnding())
+                .withReservationIdentifier(reservationDto.getReservationIdentifier())
                 .build();
 
     }

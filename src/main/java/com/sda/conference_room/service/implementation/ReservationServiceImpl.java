@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +39,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ReservationDto createReservation(final ReservationDto reservationDto) {
+        reservationDto.setReservationIdentifier(UUID.randomUUID().toString());
         log.info("Creating reservation with id: {}", reservationDto.getId());
         final Reservation reservation = ReservationMapper.map(reservationDto);
         final Reservation createdReservation = reservationRepository.save(reservation);
