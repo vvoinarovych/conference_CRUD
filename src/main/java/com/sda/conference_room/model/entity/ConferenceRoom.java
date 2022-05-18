@@ -3,7 +3,10 @@ package com.sda.conference_room.model.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -39,4 +42,6 @@ public class ConferenceRoom {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Organization organization;
+
+
 }
