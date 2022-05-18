@@ -9,11 +9,17 @@ public interface ConferenceRoomService {
 
     List<ConferenceRoomDto> getAllConferenceRooms();
 
-    ConferenceRoomDto getConferenceRoomById(final Long id);
+    List<ConferenceRoomDto> getAllAvailableConferenceRooms();//for deleting
 
-    ConferenceRoomDto addConferenceRoom(final ConferenceRoomDto conferenceRoomDto);
+    List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganization(String organizationName);
 
-    ConferenceRoomDto updateConferenceRoom(final ConferenceRoomDto conferenceRoomDto);
+    ConferenceRoom getConferenceRoomById(final Long id);
+
+    ConferenceRoomDto getConferenceRoomDtoById(final Long id);
+
+    ConferenceRoomDto createConferenceRoom(final Long OrganizationId, final ConferenceRoomDto conferenceRoomDto);
+
+    ConferenceRoomDto updateConferenceRoom(Long conferenceRoomId, ConferenceRoomDto conferenceRoomDto);
 
     void deleteConferenceRoomById(final Long id);
 

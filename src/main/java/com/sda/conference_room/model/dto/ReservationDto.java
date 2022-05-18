@@ -14,5 +14,6 @@ public class ReservationDto {
     private Long id;
     private LocalDateTime starting;
     private LocalDateTime ending;
+    private ConferenceRoomDto conferenceRoomDto;
 
 }

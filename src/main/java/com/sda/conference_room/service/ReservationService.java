@@ -8,6 +8,8 @@ public interface ReservationService {
 
     List<ReservationDto> getAllReservations();
 
+    List<ReservationDto> getAllReservationsByConferenceRoomId(Long conferenceRoomId);
+
     ReservationDto getReservationById(Long id);
 
     ReservationDto createReservation(ReservationDto reservationDto);

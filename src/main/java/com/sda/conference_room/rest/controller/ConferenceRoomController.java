@@ -25,19 +25,19 @@ public class ConferenceRoomController {
 
     @GetMapping("/find/{id}")
     public ResponseEntity<ConferenceRoomDto> getConferenceRoomById(@PathVariable("id") final Long id) {
-        ConferenceRoomDto conferenceRoom = conferenceRoomService.getConferenceRoomById(id);
+        ConferenceRoomDto conferenceRoom = conferenceRoomService.getConferenceRoomDtoById(id);
         return ResponseEntity.ok(conferenceRoom);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<ConferenceRoomDto> addConferenceRoom(@RequestBody @Valid final ConferenceRoomDto conferenceRoom) {
-        ConferenceRoomDto newConferenceRoom = conferenceRoomService.addConferenceRoom(conferenceRoom);
+    @PostMapping("/add/{orgId}")
+    public ResponseEntity<ConferenceRoomDto> addConferenceRoom(@PathVariable("orgId") Long orgId, @RequestBody @Valid final ConferenceRoomDto conferenceRoom) {
+        ConferenceRoomDto newConferenceRoom = conferenceRoomService.createConferenceRoom(orgId, conferenceRoom);
         return ResponseEntity.status(HttpStatus.CREATED).body(newConferenceRoom);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<ConferenceRoomDto> updateConferenceRoom(@RequestBody @Valid final ConferenceRoomDto conferenceRoom) {
-        ConferenceRoomDto updatedConferenceRoom = conferenceRoomService.updateConferenceRoom(conferenceRoom);
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ConferenceRoomDto> updateConferenceRoom(@PathVariable("id") Long id, @RequestBody @Valid final ConferenceRoomDto conferenceRoom) {
+        ConferenceRoomDto updatedConferenceRoom = conferenceRoomService.updateConferenceRoom(id,conferenceRoom);
         return ResponseEntity.status(HttpStatus.OK).body(updatedConferenceRoom);
     }
 

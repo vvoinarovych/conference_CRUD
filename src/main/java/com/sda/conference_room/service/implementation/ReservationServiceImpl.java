@@ -3,8 +3,10 @@ package com.sda.conference_room.service.implementation;
 import com.sda.conference_room.exception.NotFoundException;
 import com.sda.conference_room.mapper.ReservationMapper;
 import com.sda.conference_room.model.dto.ReservationDto;
+import com.sda.conference_room.model.entity.ConferenceRoom;
 import com.sda.conference_room.model.entity.Reservation;
 import com.sda.conference_room.repository.ReservationRepository;
+import com.sda.conference_room.service.ConferenceRoomService;
 import com.sda.conference_room.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final ConferenceRoomService conferenceRoomService;
 
     @Override
     public List<ReservationDto> getAllReservations() {
@@ -33,7 +36,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public ReservationDto getReservationById(final Long id) {
         log.info("Getting a reservation by id: {}", id);
-        return ReservationMapper.map(reservationRepository.getById(id));
+        return ReservationMapper.map(getReservationFromDatabaseById(id));
     }
 
     @Override
@@ -46,6 +49,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ReservationDto updateReservation(final ReservationDto reservationDto) {
+
         log.info("Updating reservation with id: {}", reservationDto.getId());
         getReservationFromDatabaseById(reservationDto.getId());
         final Reservation reservation = ReservationMapper.map(reservationDto);
@@ -55,10 +59,18 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    public List<ReservationDto> getAllReservationsByConferenceRoomId(Long conferenceRoomId) {
+        ConferenceRoom conferenceRoom = conferenceRoomService.getConferenceRoomById(conferenceRoomId);
+        return reservationRepository.getAllByConferenceRoom(conferenceRoom)
+                .stream()
+                .map(ReservationMapper::map)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void deleteReservationById(Long id) {
         log.info("Deleting reservation with id: {}", id);
         reservationRepository.delete(getReservationFromDatabaseById(id));
-
     }
 
     private Reservation getReservationFromDatabaseById(final Long id) {

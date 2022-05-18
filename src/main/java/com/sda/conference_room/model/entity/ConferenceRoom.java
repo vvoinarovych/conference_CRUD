@@ -1,10 +1,6 @@
 package com.sda.conference_room.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -12,8 +8,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "conference_rooms")
-@Data
 @Builder(setterPrefix = "with")
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ConferenceRoom {
@@ -40,6 +37,6 @@ public class ConferenceRoom {
     @OneToMany(mappedBy = "conferenceRoom", cascade = CascadeType.ALL)
     private List<Reservation> reservationList;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Organization organization;
 }

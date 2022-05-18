@@ -42,4 +42,9 @@ public class ReservationController {
         reservationService.deleteReservationById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @GetMapping("/by/{orgid}")
+    public ResponseEntity<List<ReservationDto>> getAllReservationsByConferenceRoomName(@PathVariable("orgid") Long conferenceRoomId){
+        return ResponseEntity.ok().body(reservationService.getAllReservationsByConferenceRoomId(conferenceRoomId));
+    }
 }
