@@ -9,7 +9,7 @@ import com.sda.conference_room.model.entity.Organization;
 import com.sda.conference_room.repository.ConferenceRoomRepository;
 import com.sda.conference_room.service.ConferenceRoomService;
 import com.sda.conference_room.service.OrganizationService;
-import com.sda.conference_room.validation.ConferenceRoomDatabaseUniquenessValidator;
+import com.sda.conference_room.validation.ConferenceRoomValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
 
     private final ConferenceRoomRepository conferenceRoomRepository;
     private final OrganizationService organizationService;
-    private final ConferenceRoomDatabaseUniquenessValidator conferenceRoomDatabaseUniquenessValidator;
+    private final ConferenceRoomValidator conferenceRoomValidator;
 
     @Override
     public List<ConferenceRoomDto> getAllAvailableConferenceRooms() {
@@ -57,16 +57,16 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
     }
 
     @Override
-    public ConferenceRoomDto getConferenceRoomById(final Long id) {
+    public ConferenceRoomDto getConferenceRoomDtoById(final Long id) {
         log.info("Loading conference room by id: {}", id);
-        final ConferenceRoom conferenceRoom = getConferenceRoomFromDataBase(id);
+        final ConferenceRoom conferenceRoom = getConferenceRoomById(id);
 
         return ConferenceRoomMapper.map(conferenceRoom);
     }
 
     @Override
     public ConferenceRoomDto createConferenceRoom(final Long organizationId, final ConferenceRoomDto conferenceRoomDto) {
-        if (conferenceRoomDatabaseUniquenessValidator.isValid(conferenceRoomDto)) {
+        if (conferenceRoomValidator.isValid(conferenceRoomDto)) {
             log.info("Saving conference room with id: {}", conferenceRoomDto.getId());
             Organization organization = organizationService.getOrganizationById(organizationId);
             ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
@@ -80,7 +80,7 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
     @Override
     public ConferenceRoomDto updateConferenceRoom(Long conferenceRoomId, ConferenceRoomDto conferenceRoomDto) {
         log.info("Updating conference room with id: {}", conferenceRoomDto.getId());
-        ConferenceRoom conferenceRoomFromDataBase = getConferenceRoomFromDataBase(conferenceRoomId);
+        ConferenceRoom conferenceRoomFromDataBase = getConferenceRoomById(conferenceRoomId);
         ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
         conferenceRoom.setId(conferenceRoomFromDataBase.getId());
         conferenceRoom.setOrganization(conferenceRoomFromDataBase.getOrganization());
@@ -94,7 +94,8 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
         conferenceRoomRepository.deleteById(id);
     }
 
-    private ConferenceRoom getConferenceRoomFromDataBase(final Long id) {
+    @Override
+    public ConferenceRoom getConferenceRoomById(final Long id) {
         final Optional<ConferenceRoom> conferenceRoomFromDataBase = conferenceRoomRepository.findById(id);
         return conferenceRoomFromDataBase.orElseThrow(() -> new NotFoundException("Conference Room with given id not found"));
     }

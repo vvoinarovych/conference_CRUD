@@ -10,6 +10,7 @@ public class ReservationMapper {
                 .withId(reservation.getId())
                 .withStarting(reservation.getStarting())
                 .withEnding(reservation.getEnding())
+                .withConferenceRoomDto(ConferenceRoomMapper.map(reservation.getConferenceRoom()))
                 .build();
     }
 
@@ -18,6 +19,7 @@ public class ReservationMapper {
                 .withId(reservationDto.getId())
                 .withStarting(reservationDto.getStarting())
                 .withEnding(reservationDto.getEnding())
+                .withConferenceRoom(ConferenceRoomMapper.map(reservationDto.getConferenceRoomDto()))
                 .build();
 
     }

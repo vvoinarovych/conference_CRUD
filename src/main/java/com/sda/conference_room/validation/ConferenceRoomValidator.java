@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ConferenceRoomDatabaseUniquenessValidator {
+public class ConferenceRoomValidator {
 
     private final ConferenceRoomRepository conferenceRoomRepository;
 

@@ -7,7 +7,7 @@ import com.sda.conference_room.model.dto.OrganizationDto;
 import com.sda.conference_room.model.entity.Organization;
 import com.sda.conference_room.repository.OrganizationRepository;
 import com.sda.conference_room.service.OrganizationService;
-import com.sda.conference_room.validation.OrganizationDatabaseUniquenessValidator;
+import com.sda.conference_room.validation.OrganizationValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,11 +24,11 @@ import java.util.stream.Collectors;
 public class OrganizationServiceImpl implements OrganizationService {
 
     private final OrganizationRepository organizationRepository;
-    private final OrganizationDatabaseUniquenessValidator organizationDatabaseUniquenessValidator;
+    private final OrganizationValidator organizationValidator;
 
     @Override
     public OrganizationDto saveOrganization(OrganizationDto organizationDto) {
-        if (organizationDatabaseUniquenessValidator.isValid(organizationDto)) {
+        if (organizationValidator.isValid(organizationDto)) {
             Organization organizationToSave = OrganizationMapper.map(organizationDto);
             organizationRepository.save(organizationToSave);
             log.info("Organization with name {} saved", organizationToSave.getName());

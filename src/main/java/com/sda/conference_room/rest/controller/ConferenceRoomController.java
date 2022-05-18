@@ -25,7 +25,7 @@ public class ConferenceRoomController {
 
     @GetMapping("/find/{id}")
     public ResponseEntity<ConferenceRoomDto> getConferenceRoomById(@PathVariable("id") final Long id) {
-        ConferenceRoomDto conferenceRoom = conferenceRoomService.getConferenceRoomById(id);
+        ConferenceRoomDto conferenceRoom = conferenceRoomService.getConferenceRoomDtoById(id);
         return ResponseEntity.ok(conferenceRoom);
     }
 

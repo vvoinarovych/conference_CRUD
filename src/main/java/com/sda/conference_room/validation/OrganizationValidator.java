@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class OrganizationDatabaseUniquenessValidator {
+public class OrganizationValidator {
 
     private final OrganizationRepository organizationRepository;
 
