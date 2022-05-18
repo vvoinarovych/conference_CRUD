@@ -1,7 +1,9 @@
 package com.sda.conference_room.service.implementation;
 
 import com.sda.conference_room.exception.NotFoundException;
+import com.sda.conference_room.mapper.ConferenceRoomMapper;
 import com.sda.conference_room.mapper.ReservationMapper;
+import com.sda.conference_room.model.dto.ConferenceRoomDto;
 import com.sda.conference_room.model.dto.ReservationDto;
 import com.sda.conference_room.model.entity.ConferenceRoom;
 import com.sda.conference_room.model.entity.Reservation;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,6 +51,13 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    public List<ReservationDto> getAllReservationsByOrganizationId(Long id) {
+        return getAllReservations().stream()
+                .filter(reservation -> reservation.getConferenceRoomDto().getOrganizationDto().getId().equals(id))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public ReservationDto updateReservation(final ReservationDto reservationDto) {
 
         log.info("Updating reservation with id: {}", reservationDto.getId());
@@ -75,6 +85,32 @@ public class ReservationServiceImpl implements ReservationService {
 
     private Reservation getReservationFromDatabaseById(final Long id) {
         final Optional<Reservation> reservationFromDatabase = reservationRepository.findById(id);
-        return reservationFromDatabase.orElseThrow(()-> new NotFoundException("Reservation with given id not found"));
+        return reservationFromDatabase.orElseThrow(() -> new NotFoundException("Reservation with given id not found"));
+    }
+
+    @Override
+    public List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganizationForSpecificPeriod(String organizationName, LocalDateTime start, LocalDateTime end) {
+        List<ConferenceRoom> conferenceRooms = conferenceRoomService.getAllConferenceRoomsForSpecificOrganization(organizationName).stream().map(ConferenceRoomMapper::map).collect(Collectors.toList());
+        List<Reservation> reservations = getAllReservations().stream().map(ReservationMapper::map).collect(Collectors.toList());
+
+        for (ConferenceRoom room : conferenceRooms) {
+            room.setAvailable(isRoomAvailableInSpecificPeriod(room, start, end, reservations));
+
+        }
+        return conferenceRooms.stream()
+                .map(ConferenceRoomMapper::map)
+                .collect(Collectors.toList());
+    }
+
+    public boolean isRoomAvailableInSpecificPeriod(ConferenceRoom conferenceRoom, LocalDateTime start, LocalDateTime end, List<Reservation> reservations) {
+
+        List<Reservation> reservationsForThatRoom = reservations.stream()
+                .filter(reservation -> reservation.getConferenceRoom().getName().equals(conferenceRoom.getName()))
+                .filter(reservation -> reservation.getStarting().isBefore(end) && reservation.getEnding().isAfter(start))
+                .collect(Collectors.toList());
+
+        return reservationsForThatRoom.isEmpty();
+
+
     }
 }

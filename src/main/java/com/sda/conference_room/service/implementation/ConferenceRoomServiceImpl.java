@@ -6,6 +6,7 @@ import com.sda.conference_room.mapper.ConferenceRoomMapper;
 import com.sda.conference_room.model.dto.ConferenceRoomDto;
 import com.sda.conference_room.model.entity.ConferenceRoom;
 import com.sda.conference_room.model.entity.Organization;
+import com.sda.conference_room.model.entity.Reservation;
 import com.sda.conference_room.repository.ConferenceRoomRepository;
 import com.sda.conference_room.service.ConferenceRoomService;
 import com.sda.conference_room.service.OrganizationService;
@@ -67,7 +68,7 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
     @Override
     public ConferenceRoomDto createConferenceRoom(final Long organizationId, final ConferenceRoomDto conferenceRoomDto) {
         if (conferenceRoomValidator.isValid(conferenceRoomDto)) {
-            log.info("Saving conference room with id: {}", conferenceRoomDto.getId());
+            log.info("Saving conference room with name: {}", conferenceRoomDto.getName());
             Organization organization = organizationService.getOrganizationById(organizationId);
             ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
             conferenceRoom.setOrganization(organization);
@@ -99,4 +100,6 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
         final Optional<ConferenceRoom> conferenceRoomFromDataBase = conferenceRoomRepository.findById(id);
         return conferenceRoomFromDataBase.orElseThrow(() -> new NotFoundException("Conference Room with given id not found"));
     }
+
+
 }

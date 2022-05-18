@@ -21,22 +21,22 @@ public class OrganizationController {
         return ResponseEntity.ok(organizationService.getALlOrganizations());
     }
 
-    @GetMapping("/find/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<OrganizationDto> getOrganizationById (@PathVariable("id") final Long id) {
         return ResponseEntity.ok(organizationService.getOrganizationDtoById(id));
     }
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<OrganizationDto> addOrganization(@RequestBody @Valid final OrganizationDto organizationDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(organizationService.saveOrganization(organizationDto));
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<OrganizationDto> updateOrganization(@PathVariable("id") final Long id, @RequestBody @Valid final OrganizationDto organizationDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(organizationService.updateOrganization(id, organizationDto));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable("id") final Long id) {
         organizationService.deleteOrganizationById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
