@@ -54,11 +54,14 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public OrganizationDto updateOrganization(Long organizationId, OrganizationDto organizationDto) {
-        final Organization organizationFromRequest = OrganizationMapper.map(organizationDto);
-        organizationFromRequest.setId(organizationId);
-        organizationRepository.save(organizationFromRequest);
-        log.info("Organization with id {} updated", organizationId);
-        return OrganizationMapper.map(organizationFromRequest);
+        if (organizationValidator.isValid(organizationDto)) {
+            final Organization organizationFromRequest = OrganizationMapper.map(organizationDto);
+            organizationFromRequest.setId(organizationId);
+            organizationRepository.save(organizationFromRequest);
+            log.info("Organization with id {} updated", organizationId);
+            return OrganizationMapper.map(organizationFromRequest);
+        }
+        throw new NameIsNotUniqueException("Organization with that name already exists");
     }
 
     @Override

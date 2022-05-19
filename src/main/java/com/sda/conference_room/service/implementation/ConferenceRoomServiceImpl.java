@@ -79,13 +79,16 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
 
     @Override
     public ConferenceRoomDto updateConferenceRoom(Long conferenceRoomId, ConferenceRoomDto conferenceRoomDto) {
-        log.info("Updating conference room with id: {}", conferenceRoomDto.getId());
-        ConferenceRoom conferenceRoomFromDataBase = getConferenceRoomById(conferenceRoomId);
-        ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
-        conferenceRoom.setId(conferenceRoomFromDataBase.getId());
-        conferenceRoom.setOrganization(conferenceRoomFromDataBase.getOrganization());
-        ConferenceRoom updatedConferenceRoom = conferenceRoomRepository.save(conferenceRoom);
-        return ConferenceRoomMapper.map(updatedConferenceRoom);
+        if (conferenceRoomValidator.isValid(conferenceRoomDto)) {
+            log.info("Updating conference room with id: {}", conferenceRoomDto.getId());
+            ConferenceRoom conferenceRoomFromDataBase = getConferenceRoomById(conferenceRoomId);
+            ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
+            conferenceRoom.setId(conferenceRoomFromDataBase.getId());
+            conferenceRoom.setOrganization(conferenceRoomFromDataBase.getOrganization());
+            ConferenceRoom updatedConferenceRoom = conferenceRoomRepository.save(conferenceRoom);
+            return ConferenceRoomMapper.map(updatedConferenceRoom);
+        }
+        throw new NameIsNotUniqueException("Conference room with that name already exists");
     }
 
     @Override
