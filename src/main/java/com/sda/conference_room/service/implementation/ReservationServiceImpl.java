@@ -1,7 +1,7 @@
 package com.sda.conference_room.service.implementation;
 
 import com.sda.conference_room.exception.NotFoundException;
-import com.sda.conference_room.exception.ReservationAlreadyExist;
+import com.sda.conference_room.exception.AlreadyExist;
 import com.sda.conference_room.mapper.ConferenceRoomMapper;
 import com.sda.conference_room.mapper.ReservationMapper;
 import com.sda.conference_room.model.dto.ConferenceRoomDto;
@@ -52,7 +52,7 @@ public class ReservationServiceImpl implements ReservationService {
             Reservation createdReservation = reservationRepository.save(reservation);
             return ReservationMapper.map(createdReservation);
         }
-        throw new ReservationAlreadyExist("Unable to book room for that date");
+        throw new AlreadyExist("Unable to book that conference room for that date");
 
     }
 

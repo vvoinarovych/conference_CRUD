@@ -37,4 +37,11 @@ public class ApplicationExceptionHandler{
         log.debug(ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
+
+    @ExceptionHandler(AlreadyExist.class)
+    private ResponseEntity<ErrorModel> handleReservationAlreadyExist(AlreadyExist ex){
+        ErrorModel error = new ErrorModel(HttpStatus.SERVICE_UNAVAILABLE, "Reservation for this date and this room already exist", ex.getMessage());
+        log.debug(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(error);
+    }
 }
