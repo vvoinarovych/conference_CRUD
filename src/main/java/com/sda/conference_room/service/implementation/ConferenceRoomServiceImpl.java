@@ -40,7 +40,7 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
 
     @Override
     public List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganization(Long organizationId) {
-        log.info("Loading all  conference rooms for organization: {}.", organizationId);
+        log.info("Loading all  conference rooms for organization with id: {}.", organizationId);
         return conferenceRoomRepository.findAll()
                 .stream()
                 .filter(room -> room.getOrganization().getId().equals(organizationId))
@@ -61,14 +61,13 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
     public ConferenceRoomDto getConferenceRoomDtoById(final Long id) {
         log.info("Loading conference room by id: {}", id);
         final ConferenceRoom conferenceRoom = getConferenceRoomById(id);
-
         return ConferenceRoomMapper.map(conferenceRoom);
     }
 
     @Override
     public ConferenceRoomDto createConferenceRoom(final Long organizationId, final ConferenceRoomDto conferenceRoomDto) {
         if (conferenceRoomValidator.isValid(conferenceRoomDto)) {
-            log.info("Saving conference room with name: {}", conferenceRoomDto.getName());
+            log.info("Saving conference room with id: {}", conferenceRoomDto.getName());
             Organization organization = organizationService.getOrganizationById(organizationId);
             ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
             conferenceRoom.setOrganization(organization);

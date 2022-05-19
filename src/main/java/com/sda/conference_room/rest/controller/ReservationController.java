@@ -58,9 +58,7 @@ public class ReservationController {
     @PostMapping("/period/{organizationId}")
     public ResponseEntity<List<ConferenceRoomDto>> getAllConferenceRoomsForSpecificOrganizationForSpecificPeriod(@PathVariable("organizationId") Long organizationId,
                                                                                                                  @RequestBody ReservationDto reservationDto) {
-        LocalDateTime start = reservationDto.getStarting();
-        LocalDateTime end = reservationDto.getEnding();
 
-        return ResponseEntity.ok().body(reservationService.getAllConferenceRoomsForSpecificOrganizationForSpecificPeriod(organizationId, start,  end));
+        return ResponseEntity.ok().body(reservationService.getAllConferenceRoomsForSpecificOrganizationForSpecificPeriod(organizationId, reservationDto));
     }
 }

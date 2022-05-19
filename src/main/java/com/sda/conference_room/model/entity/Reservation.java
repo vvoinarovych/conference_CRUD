@@ -24,10 +24,4 @@ public class Reservation {
     @ManyToOne
     private ConferenceRoom conferenceRoom;
 
-    @Override
-    public String toString() {
-        return "Reservation{" +
-                "id=" + id +
-                '}';
-    }
 }

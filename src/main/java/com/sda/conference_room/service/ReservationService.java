@@ -12,7 +12,7 @@ public interface ReservationService {
 
     List<ReservationDto> getAllReservationsByConferenceRoomId(Long conferenceRoomId);
 
-    List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganizationForSpecificPeriod(Long organizationId, LocalDateTime start, LocalDateTime end);
+    List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganizationForSpecificPeriod(Long organizationId, ReservationDto reservationDto);
 
     ReservationDto getReservationById(Long id);
 
