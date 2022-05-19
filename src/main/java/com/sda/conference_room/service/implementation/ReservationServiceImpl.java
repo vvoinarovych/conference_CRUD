@@ -1,6 +1,7 @@
 package com.sda.conference_room.service.implementation;
 
 import com.sda.conference_room.exception.NotFoundException;
+import com.sda.conference_room.exception.AlreadyExist;
 import com.sda.conference_room.mapper.ConferenceRoomMapper;
 import com.sda.conference_room.mapper.ReservationMapper;
 import com.sda.conference_room.model.dto.ConferenceRoomDto;
@@ -44,10 +45,15 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ReservationDto createReservation(final ReservationDto reservationDto) {
-        log.info("Creating reservation with id: {}", reservationDto.getId());
-        final Reservation reservation = ReservationMapper.map(reservationDto);
-        final Reservation createdReservation = reservationRepository.save(reservation);
-        return ReservationMapper.map(createdReservation);
+        Reservation reservation = ReservationMapper.map(reservationDto);
+        List<Reservation> reservations = getAllReservations().stream().map(ReservationMapper::map).collect(Collectors.toList());
+        if(isRoomAvailableInSpecificPeriod(reservation.getConferenceRoom(),reservation.getStarting(), reservation.getEnding(), reservations)){
+            log.info("Creating reservation with id: {}", reservationDto.getId());
+            Reservation createdReservation = reservationRepository.save(reservation);
+            return ReservationMapper.map(createdReservation);
+        }
+        throw new AlreadyExist("Unable to book that conference room for that date");
+
     }
 
     @Override
@@ -58,7 +64,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationDto updateReservation(final ReservationDto reservationDto) {
+    public ReservationDto updateReservation(Long reservationId, ReservationDto reservationDto) {
 
         log.info("Updating reservation with id: {}", reservationDto.getId());
         getReservationFromDatabaseById(reservationDto.getId());
@@ -89,24 +95,26 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganizationForSpecificPeriod(String organizationName, LocalDateTime start, LocalDateTime end) {
-        List<ConferenceRoom> conferenceRooms = conferenceRoomService.getAllConferenceRoomsForSpecificOrganization(organizationName).stream().map(ConferenceRoomMapper::map).collect(Collectors.toList());
+    public List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganizationForSpecificPeriod(Long organizationId, ReservationDto reservationDto) {
+        LocalDateTime start = reservationDto.getStarting();
+        LocalDateTime end = reservationDto.getEnding();
+        List<ConferenceRoom> conferenceRooms = conferenceRoomService.getAllConferenceRoomsForSpecificOrganization(organizationId).stream().map(ConferenceRoomMapper::map).collect(Collectors.toList());
         List<Reservation> reservations = getAllReservations().stream().map(ReservationMapper::map).collect(Collectors.toList());
 
         for (ConferenceRoom room : conferenceRooms) {
             room.setAvailable(isRoomAvailableInSpecificPeriod(room, start, end, reservations));
-
         }
         return conferenceRooms.stream()
                 .map(ConferenceRoomMapper::map)
                 .collect(Collectors.toList());
     }
 
-    public boolean isRoomAvailableInSpecificPeriod(ConferenceRoom conferenceRoom, LocalDateTime start, LocalDateTime end, List<Reservation> reservations) {
+    private boolean isRoomAvailableInSpecificPeriod(ConferenceRoom conferenceRoom, LocalDateTime start, LocalDateTime end, List<Reservation> reservations) {
 
         List<Reservation> reservationsForThatRoom = reservations.stream()
                 .filter(reservation -> reservation.getConferenceRoom().getName().equals(conferenceRoom.getName()))
-                .filter(reservation -> reservation.getStarting().isBefore(end) && reservation.getEnding().isAfter(start))
+                .filter(reservation -> (reservation.getStarting().isBefore(end) || reservation.getStarting().isEqual(end))
+                        && (reservation.getEnding().isAfter(start) || reservation.getEnding().isEqual(start)))
                 .collect(Collectors.toList());
 
         return reservationsForThatRoom.isEmpty();

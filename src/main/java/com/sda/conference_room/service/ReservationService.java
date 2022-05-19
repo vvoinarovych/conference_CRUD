@@ -12,13 +12,13 @@ public interface ReservationService {
 
     List<ReservationDto> getAllReservationsByConferenceRoomId(Long conferenceRoomId);
 
-    List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganizationForSpecificPeriod(String organizationName, LocalDateTime start, LocalDateTime end);
+    List<ConferenceRoomDto> getAllConferenceRoomsForSpecificOrganizationForSpecificPeriod(Long organizationId, ReservationDto reservationDto);
 
     ReservationDto getReservationById(Long id);
 
     ReservationDto createReservation(ReservationDto reservationDto);
 
-    ReservationDto updateReservation(ReservationDto reservationDto);
+    ReservationDto updateReservation(Long reservationId, ReservationDto reservationDto);
 
     void deleteReservationById(Long id);
 

@@ -34,4 +34,5 @@ public class ConferenceRoomDto {
     private Long standingPlaces;
 
     private OrganizationDto organizationDto;
+
 }
