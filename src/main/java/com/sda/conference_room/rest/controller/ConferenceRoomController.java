@@ -23,6 +23,12 @@ public class ConferenceRoomController {
         return ResponseEntity.ok(conferenceRooms);
     }
 
+    @GetMapping("/all{organizationId}")
+    public ResponseEntity<List<ConferenceRoomDto>> getAllConferenceRoomsForSpecificOrganization(@PathVariable("organizationId") Long organizationId) {
+        List<ConferenceRoomDto> conferenceRooms = conferenceRoomService.getAllConferenceRoomsForSpecificOrganization(organizationId);
+        return ResponseEntity.ok(conferenceRooms);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ConferenceRoomDto> getConferenceRoomById(@PathVariable("id") final Long id) {
         ConferenceRoomDto conferenceRoom = conferenceRoomService.getConferenceRoomDtoById(id);
