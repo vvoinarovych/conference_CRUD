@@ -1,4 +1,4 @@
-package com.sda.conference_room.mapper;
+package com.sda.conference_room.utils.mapper;
 
 import com.sda.conference_room.model.dto.ReservationDto;
 import com.sda.conference_room.model.entity.Reservation;

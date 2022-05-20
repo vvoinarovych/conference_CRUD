@@ -1,4 +1,4 @@
-package com.sda.conference_room.validation;
+package com.sda.conference_room.utils.validation;
 
 import com.sda.conference_room.model.dto.ConferenceRoomDto;
 import com.sda.conference_room.model.entity.ConferenceRoom;

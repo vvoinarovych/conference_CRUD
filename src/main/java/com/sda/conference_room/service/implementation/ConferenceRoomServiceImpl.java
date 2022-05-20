@@ -2,15 +2,14 @@ package com.sda.conference_room.service.implementation;
 
 import com.sda.conference_room.exception.NameIsNotUniqueException;
 import com.sda.conference_room.exception.NotFoundException;
-import com.sda.conference_room.mapper.ConferenceRoomMapper;
+import com.sda.conference_room.utils.mapper.ConferenceRoomMapper;
 import com.sda.conference_room.model.dto.ConferenceRoomDto;
 import com.sda.conference_room.model.entity.ConferenceRoom;
 import com.sda.conference_room.model.entity.Organization;
-import com.sda.conference_room.model.entity.Reservation;
 import com.sda.conference_room.repository.ConferenceRoomRepository;
 import com.sda.conference_room.service.ConferenceRoomService;
 import com.sda.conference_room.service.OrganizationService;
-import com.sda.conference_room.validation.ConferenceRoomValidator;
+import com.sda.conference_room.utils.validation.ConferenceRoomValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

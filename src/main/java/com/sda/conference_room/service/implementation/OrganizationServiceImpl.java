@@ -2,12 +2,12 @@ package com.sda.conference_room.service.implementation;
 
 import com.sda.conference_room.exception.NameIsNotUniqueException;
 import com.sda.conference_room.exception.NotFoundException;
-import com.sda.conference_room.mapper.OrganizationMapper;
+import com.sda.conference_room.utils.mapper.OrganizationMapper;
 import com.sda.conference_room.model.dto.OrganizationDto;
 import com.sda.conference_room.model.entity.Organization;
 import com.sda.conference_room.repository.OrganizationRepository;
 import com.sda.conference_room.service.OrganizationService;
-import com.sda.conference_room.validation.OrganizationValidator;
+import com.sda.conference_room.utils.validation.OrganizationValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,8 +29,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public OrganizationDto saveOrganization(OrganizationDto organizationDto) {
         if (organizationValidator.isValid(organizationDto)) {
-            Organization organizationToSave = OrganizationMapper.map(organizationDto);
-            organizationRepository.save(organizationToSave);
+            Organization organizationToSave = organizationRepository.save(OrganizationMapper.map(organizationDto));
             log.info("Organization with name {} saved", organizationToSave.getName());
             return OrganizationMapper.map(organizationToSave);
         }
