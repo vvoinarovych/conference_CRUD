@@ -2,8 +2,8 @@ package com.sda.conference_room.service.implementation;
 
 import com.sda.conference_room.exception.NotFoundException;
 import com.sda.conference_room.exception.AlreadyExist;
-import com.sda.conference_room.mapper.ConferenceRoomMapper;
-import com.sda.conference_room.mapper.ReservationMapper;
+import com.sda.conference_room.utils.mapper.ConferenceRoomMapper;
+import com.sda.conference_room.utils.mapper.ReservationMapper;
 import com.sda.conference_room.model.dto.ConferenceRoomDto;
 import com.sda.conference_room.model.dto.ReservationDto;
 import com.sda.conference_room.model.entity.ConferenceRoom;
@@ -118,7 +118,5 @@ public class ReservationServiceImpl implements ReservationService {
                 .collect(Collectors.toList());
 
         return reservationsForThatRoom.isEmpty();
-
-
     }
 }
