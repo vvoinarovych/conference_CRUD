@@ -25,7 +25,7 @@ public class ConferenceRoomValidator {
         if(conferenceRoomFromDb == null){
             return true;
         }
-        throw new NameIsNotUniqueException("ConferenceRoomWithThatName Already exist");
+        throw new NameIsNotUniqueException("Conference Room With that Name Already exists");
     }
     private boolean hasSameName(Long conferenceRoomId, ConferenceRoomDto conferenceRoomDto ){
         String conferenceRoomFromDbName = conferenceRoomRepository.getById(conferenceRoomId).getName();
