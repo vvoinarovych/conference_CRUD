@@ -2,6 +2,8 @@ package com.sda.conference_room.service;
 
 import com.sda.conference_room.model.dto.ConferenceRoomDto;
 import com.sda.conference_room.model.dto.ReservationDto;
+import com.sda.conference_room.model.entity.ConferenceRoom;
+import com.sda.conference_room.model.entity.Reservation;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,4 +25,6 @@ public interface ReservationService {
     void deleteReservationById(Long id);
 
     List<ReservationDto> getAllReservationsByOrganizationId(Long id);
+
+    boolean isRoomAvailableInSpecificPeriod(ConferenceRoom conferenceRoom, LocalDateTime start, LocalDateTime end, List<Reservation> reservations);
 }

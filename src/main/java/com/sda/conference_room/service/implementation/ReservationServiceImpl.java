@@ -109,7 +109,8 @@ public class ReservationServiceImpl implements ReservationService {
                 .collect(Collectors.toList());
     }
 
-    private boolean isRoomAvailableInSpecificPeriod(ConferenceRoom conferenceRoom, LocalDateTime start, LocalDateTime end, List<Reservation> reservations) {
+    @Override
+    public boolean isRoomAvailableInSpecificPeriod(ConferenceRoom conferenceRoom, LocalDateTime start, LocalDateTime end, List<Reservation> reservations) {
 
         List<Reservation> reservationsForThatRoom = reservations.stream()
                 .filter(reservation -> reservation.getConferenceRoom().getName().equals(conferenceRoom.getName()))
