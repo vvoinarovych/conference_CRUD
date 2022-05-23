@@ -11,9 +11,11 @@ import com.sda.conference_room.model.entity.Reservation;
 import com.sda.conference_room.repository.ReservationRepository;
 import com.sda.conference_room.service.ConferenceRoomService;
 import com.sda.conference_room.service.ReservationService;
+import com.sda.conference_room.utils.validation.ReservationValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,10 +25,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final ConferenceRoomService conferenceRoomService;
+    private final ReservationValidator reservationValidator;
 
     @Override
     public List<ReservationDto> getAllReservations() {
@@ -46,8 +50,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public ReservationDto createReservation(final ReservationDto reservationDto) {
         Reservation reservation = ReservationMapper.map(reservationDto);
-        List<Reservation> reservations = getAllReservations().stream().map(ReservationMapper::map).collect(Collectors.toList());
-        if(isRoomAvailableInSpecificPeriod(reservation.getConferenceRoom(),reservation.getStarting(), reservation.getEnding(), reservations)){
+        if(reservationValidator.isRoomAvailableInSpecificPeriod(reservation.getConferenceRoom(),reservation.getStarting(), reservation.getEnding())){
             log.info("Creating reservation with id: {}", reservationDto.getId());
             Reservation createdReservation = reservationRepository.save(reservation);
             return ReservationMapper.map(createdReservation);
@@ -99,25 +102,12 @@ public class ReservationServiceImpl implements ReservationService {
         LocalDateTime start = reservationDto.getStarting();
         LocalDateTime end = reservationDto.getEnding();
         List<ConferenceRoom> conferenceRooms = conferenceRoomService.getAllConferenceRoomsForSpecificOrganization(organizationId).stream().map(ConferenceRoomMapper::map).collect(Collectors.toList());
-        List<Reservation> reservations = getAllReservations().stream().map(ReservationMapper::map).collect(Collectors.toList());
 
         for (ConferenceRoom room : conferenceRooms) {
-            room.setAvailable(isRoomAvailableInSpecificPeriod(room, start, end, reservations));
+            room.setAvailable(reservationValidator.isRoomAvailableInSpecificPeriod(room, start, end));
         }
         return conferenceRooms.stream()
                 .map(ConferenceRoomMapper::map)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public boolean isRoomAvailableInSpecificPeriod(ConferenceRoom conferenceRoom, LocalDateTime start, LocalDateTime end, List<Reservation> reservations) {
-
-        List<Reservation> reservationsForThatRoom = reservations.stream()
-                .filter(reservation -> reservation.getConferenceRoom().getName().equals(conferenceRoom.getName()))
-                .filter(reservation -> (reservation.getStarting().isBefore(end) || reservation.getStarting().isEqual(end))
-                        && (reservation.getEnding().isAfter(start) || reservation.getEnding().isEqual(start)))
-                .collect(Collectors.toList());
-
-        return reservationsForThatRoom.isEmpty();
     }
 }
