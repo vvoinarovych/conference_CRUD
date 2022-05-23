@@ -2,6 +2,7 @@ package com.sda.conference_room.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sda.conference_room.model.dto.OrganizationDto;
+import com.sda.conference_room.repository.OrganizationRepository;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,9 @@ class OrganizationControllerIntegrationTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private OrganizationRepository orgRepo;
 
 
     @Test
@@ -75,7 +79,6 @@ class OrganizationControllerIntegrationTest {
         OrganizationDto toUpdate = OrganizationDto.builder()
                 .withName("Jakarta")
                 .build();
-        long idForUpdate = 2;
 
         mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:" + port + "/api/organization/add")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -87,6 +90,8 @@ class OrganizationControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$[0].name").value("Java"));
+
+        long idForUpdate = orgRepo.findOrganizationByName("Java").getId();
 
         mockMvc.perform(MockMvcRequestBuilders.put("http://localhost:" + port + "/api/organization/" + idForUpdate)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -107,7 +112,6 @@ class OrganizationControllerIntegrationTest {
         OrganizationDto toAdd = OrganizationDto.builder()
                 .withName("Umbrella")
                 .build();
-        long idToRemove = 3;
 
         mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:" + port + "/api/organization/add")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -120,6 +124,7 @@ class OrganizationControllerIntegrationTest {
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$[0].name").value("Umbrella"));
 
+        long idToRemove = orgRepo.findOrganizationByName("Umbrella").getId();
 
         mockMvc.perform(MockMvcRequestBuilders.delete("http://localhost:" + port + "/api/organization/" + idToRemove))
                 .andExpect(status().is2xxSuccessful());
@@ -130,14 +135,13 @@ class OrganizationControllerIntegrationTest {
                 .andExpect(status().is2xxSuccessful());
     }
 
-
     @Test
     @Order(5)
-    void getOrganizationByNameShouldReturnNotFoundException () throws Exception {
+    void getOrganizationByIdShouldReturnNotFoundException () throws Exception {
         OrganizationDto toAdd = OrganizationDto.builder()
                 .withName("Ancient Rome")
                 .build();
-        int idToFind = 17;
+        long idToFind = 17;
 
         mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:" + port + "/api/organization/add")
                         .contentType(MediaType.APPLICATION_JSON)

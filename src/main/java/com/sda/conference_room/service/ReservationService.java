@@ -26,5 +26,4 @@ public interface ReservationService {
 
     List<ReservationDto> getAllReservationsByOrganizationId(Long id);
 
-    boolean isRoomAvailableInSpecificPeriod(ConferenceRoom conferenceRoom, LocalDateTime start, LocalDateTime end, List<Reservation> reservations);
 }

@@ -13,6 +13,7 @@ import com.sda.conference_room.utils.validation.ConferenceRoomValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class ConferenceRoomServiceImpl implements ConferenceRoomService {
 
     private final ConferenceRoomRepository conferenceRoomRepository;
@@ -65,25 +67,29 @@ public class ConferenceRoomServiceImpl implements ConferenceRoomService {
 
     @Override
     public ConferenceRoomDto createConferenceRoom(final Long organizationId, final ConferenceRoomDto conferenceRoomDto) {
-        conferenceRoomValidator.isValidForCreate(conferenceRoomDto);
-        log.info("Saving conference room with id: {}", conferenceRoomDto.getName());
-        Organization organization = organizationService.getOrganizationById(organizationId);
-        ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
-        conferenceRoom.setOrganization(organization);
-        ConferenceRoom addedConferenceRoom = conferenceRoomRepository.save(conferenceRoom);
-        return ConferenceRoomMapper.map(addedConferenceRoom);
+        if(conferenceRoomValidator.isValidForCreate(conferenceRoomDto)) {
+            log.info("Saving conference room with id: {}", conferenceRoomDto.getName());
+            Organization organization = organizationService.getOrganizationById(organizationId);
+            ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
+            conferenceRoom.setOrganization(organization);
+            ConferenceRoom addedConferenceRoom = conferenceRoomRepository.save(conferenceRoom);
+            return ConferenceRoomMapper.map(addedConferenceRoom);
+        }
+        throw new NameIsNotUniqueException("Conference room with that name already exist");
     }
 
     @Override
     public ConferenceRoomDto updateConferenceRoom(Long conferenceRoomId, ConferenceRoomDto conferenceRoomDto) {
-        conferenceRoomValidator.isValidForUpdate(conferenceRoomId, conferenceRoomDto);
-        log.info("Updating conference room with id: {}", conferenceRoomDto.getId());
-        ConferenceRoom conferenceRoomFromDataBase = getConferenceRoomById(conferenceRoomId);
-        ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
-        conferenceRoom.setId(conferenceRoomFromDataBase.getId());
-        conferenceRoom.setOrganization(conferenceRoomFromDataBase.getOrganization());
-        ConferenceRoom updatedConferenceRoom = conferenceRoomRepository.save(conferenceRoom);
-        return ConferenceRoomMapper.map(updatedConferenceRoom);
+        if (conferenceRoomValidator.isValidForUpdate(conferenceRoomId, conferenceRoomDto)) {
+            log.info("Updating conference room with id: {}", conferenceRoomDto.getId());
+            ConferenceRoom conferenceRoomFromDataBase = getConferenceRoomById(conferenceRoomId);
+            ConferenceRoom conferenceRoom = ConferenceRoomMapper.map(conferenceRoomDto);
+            conferenceRoom.setId(conferenceRoomFromDataBase.getId());
+            conferenceRoom.setOrganization(conferenceRoomFromDataBase.getOrganization());
+            ConferenceRoom updatedConferenceRoom = conferenceRoomRepository.save(conferenceRoom);
+            return ConferenceRoomMapper.map(updatedConferenceRoom);
+        }
+        throw new NameIsNotUniqueException("Conference room with that name already exist");
     }
 
     @Override

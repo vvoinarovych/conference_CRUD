@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sda.conference_room.model.dto.ConferenceRoomDto;
 import com.sda.conference_room.model.dto.OrganizationDto;
 import com.sda.conference_room.model.dto.ReservationDto;
+import com.sda.conference_room.repository.ConferenceRoomRepository;
+import com.sda.conference_room.repository.OrganizationRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -35,10 +37,15 @@ class ReservationControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private ConferenceRoomRepository cRoomRepo;
+
+    @Autowired
+    private OrganizationRepository orgRepo;
+
 
     @BeforeEach
     void setUp() throws Exception {
-        long organizationId = 1L;
 
         OrganizationDto organizationDto = OrganizationDto.builder()
                 .withName("Apple")
@@ -53,6 +60,8 @@ class ReservationControllerIntegrationTest {
                 .withName("Blue")
                 .build();
 
+        long organizationId = orgRepo.findOrganizationByName("Apple").getId();
+
         mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:" + port + "/api/conferenceroom/add/" + organizationId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(conferenceRoomDto)))
@@ -63,10 +72,10 @@ class ReservationControllerIntegrationTest {
     @Test
     @Order(1)
     void addReservationShouldAddReservationToDatabase() throws Exception {
-
+        long conferenceRoomForAddId = cRoomRepo.findConferenceRoomByName("Blue").getId();
         ReservationDto toAdd = ReservationDto.builder()
                 .withId(3L)
-                .withConferenceRoomDto(ConferenceRoomDto.builder().withId(2L).build())
+                .withConferenceRoomDto(ConferenceRoomDto.builder().withId(conferenceRoomForAddId).build())
                 .build();
 
         mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:" + port + "/api/reservation/add")
@@ -78,7 +87,7 @@ class ReservationControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:" + port + "/api/reservation/all"))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$[0].id").value(3L));
+                .andExpect(jsonPath("$[0].id").value(15L));
     }
 
     @Test

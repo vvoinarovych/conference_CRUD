@@ -3,6 +3,8 @@ package com.sda.conference_room.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sda.conference_room.model.dto.ConferenceRoomDto;
 import com.sda.conference_room.model.dto.OrganizationDto;
+import com.sda.conference_room.repository.ConferenceRoomRepository;
+import com.sda.conference_room.repository.OrganizationRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -34,6 +36,12 @@ class ConferenceRoomControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private ConferenceRoomRepository cRoomRepo;
+
+    @Autowired
+    private OrganizationRepository orgRepo;
+
     @BeforeEach
     void setUp() throws Exception {
         OrganizationDto organizationDto = OrganizationDto.builder()
@@ -49,7 +57,7 @@ class ConferenceRoomControllerIntegrationTest {
     @Test
     @Order(1)
     void addConferenceRoomShouldAddConferenceRoomToDatabase() throws Exception {
-        long organizationId = 1L;
+        long organizationId = orgRepo.findOrganizationByName("Kirin Tor").getId();
 
         ConferenceRoomDto conferenceRoomDto = ConferenceRoomDto.builder()
                 .withName("The Violet Hold")
@@ -70,40 +78,38 @@ class ConferenceRoomControllerIntegrationTest {
     @Test
     @Order(2)
     void addConferenceRoomShouldThrowExceptionIfNameNotUnique() throws Exception {
-        long organizationId = 3L;
+        long organizationId = orgRepo.findOrganizationByName("Kirin Tor").getId();
 
         ConferenceRoomDto conferenceRoomDto = ConferenceRoomDto.builder()
                 .withName("The Violet Hold")
                 .build();
 
-        mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:" + port + "/api/conferenceroom/add/"+ organizationId)
+        mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:" + port + "/api/conferenceroom/add/" + organizationId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(conferenceRoomDto)))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:" + port + "/api/conferenceroom/add/"+ organizationId)
+        mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:" + port + "/api/conferenceroom/add/" + organizationId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(conferenceRoomDto)))
                 .andDo(print())
                 .andDo(print())
                 .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.message").value("Name must be unique"))
-                .andExpect(jsonPath("$.details").value("Conference room with that name already exists"))
+                .andExpect(jsonPath("$.details").value("Conference room with that name already exist"))
                 .andExpect(status().is4xxClientError());
     }
 
     @Test
     @Order(3)
     void deleteConferenceRoomShouldDeleteRecordFromDatabase() throws Exception {
-        long organizationId = 5L;
-
+        long organizationId = orgRepo.findOrganizationByName("Kirin Tor").getId();
         ConferenceRoomDto conferenceRoomDto = ConferenceRoomDto.builder()
                 .withName("The Violet Hold")
                 .build();
-        long conferenceRoomId = 6L;
 
-        mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:" + port + "/api/conferenceroom/add/"+organizationId)
+        mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:" + port + "/api/conferenceroom/add/" + organizationId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(conferenceRoomDto)))
                 .andDo(print())
@@ -113,6 +119,8 @@ class ConferenceRoomControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$[0].name").value("The Violet Hold"));
+
+        long conferenceRoomId = cRoomRepo.findConferenceRoomByName("The Violet Hold").getId();
 
         mockMvc.perform(MockMvcRequestBuilders.delete("http://localhost:" + port + "/api/conferenceroom/" + conferenceRoomId))
                 .andExpect(status().is2xxSuccessful());
@@ -126,7 +134,7 @@ class ConferenceRoomControllerIntegrationTest {
     @Test
     @Order(4)
     void updateOrganizationShouldUpdateOrganization() throws Exception {
-        long organizationId = 7L;
+        long organizationId = orgRepo.findOrganizationByName("Kirin Tor").getId();
 
         ConferenceRoomDto conferenceRoomDto = ConferenceRoomDto.builder()
                 .withName("The Violet Hold")
@@ -134,16 +142,17 @@ class ConferenceRoomControllerIntegrationTest {
         ConferenceRoomDto conferenceRoomDtoUpdate = ConferenceRoomDto.builder()
                 .withName("Stratholme")
                 .build();
-        long conferenceRoomId = 8L;
 
 
-        mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:" + port + "/api/conferenceroom/add/"+organizationId)
+        mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:" + port + "/api/conferenceroom/add/" + organizationId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(conferenceRoomDto)))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
-        mockMvc.perform(MockMvcRequestBuilders.put("http://localhost:" + port + "/api/conferenceroom/"+conferenceRoomId)
+        long conferenceRoomId = cRoomRepo.findConferenceRoomByName("The Violet Hold").getId();
+
+        mockMvc.perform(MockMvcRequestBuilders.put("http://localhost:" + port + "/api/conferenceroom/" + conferenceRoomId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(conferenceRoomDtoUpdate)))
                 .andDo(print())
